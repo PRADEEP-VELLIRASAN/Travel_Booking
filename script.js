@@ -222,9 +222,85 @@ function searchBuses() {
         return;
     }
 
-    displayBuses(filteredBuses);
-    document.querySelector('.search-section').classList.add('hidden');
-    resultsSection.classList.remove('hidden');
+    // Open new tab and show bus selection and passenger input
+    const newTab = window.open('', '_blank');
+    if (!newTab) {
+        alert('Popup blocked! Please allow popups for this site.');
+        return;
+    }
+
+    // Prepare HTML for new tab
+    let html = `
+        <html>
+        <head>
+            <title>Select Bus & Passengers</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 30px; }
+                .bus-card { border: 1px solid #ccc; padding: 16px; margin-bottom: 16px; border-radius: 8px; }
+                .bus-name { font-weight: bold; font-size: 1.2em; }
+                .bus-route, .bus-timings, .bus-duration { margin: 4px 0; }
+                .bus-pricing { margin-top: 8px; }
+                .select-btn { margin-top: 8px; padding: 6px 16px; }
+                .amount-section { margin-top: 24px; }
+            </style>
+        </head>
+        <body>
+            <h2>Select a Bus</h2>
+            <div id="bus-list">
+    `;
+
+    filteredBuses.forEach(bus => {
+        html += `
+            <div class="bus-card">
+                <div class="bus-name">${bus.name}</div>
+                <div class="bus-route">${bus.from} → ${bus.to}</div>
+                <div class="bus-timings">Dep: ${bus.departureTime} | Arr: ${bus.arrivalTime}</div>
+                <div class="bus-duration">Duration: ${bus.duration}</div>
+                <div class="bus-pricing">Price per seat: ₹${bus.price} | Seats available: ${bus.seats}</div>
+                <button class="select-btn" onclick="selectBus(${bus.id})">Select This Bus</button>
+            </div>
+        `;
+    });
+
+    html += `
+            </div>
+            <div id="passenger-section" style="display:none;">
+                <h3>Enter Number of Passengers</h3>
+                <input type="number" id="num-passengers" min="1" value="1" style="width:60px;">
+                <button onclick="calculateAmount()">Calculate Amount</button>
+                <div id="amount-result" class="amount-section"></div>
+            </div>
+            <script>
+                let selectedBus = null;
+                let busData = ${JSON.stringify(filteredBuses)};
+                function selectBus(busId) {
+                    selectedBus = busData.find(b => b.id === busId);
+                    document.getElementById('passenger-section').style.display = '';
+                    document.getElementById('amount-result').innerHTML = '';
+                }
+                function calculateAmount() {
+                    const num = parseInt(document.getElementById('num-passengers').value);
+                    if (!selectedBus) {
+                        alert('Please select a bus first.');
+                        return;
+                    }
+                    if (num < 1 || num > selectedBus.seats) {
+                        alert('Please enter a valid number of passengers (max: ' + selectedBus.seats + ')');
+                        return;
+                    }
+                    const amount = num * selectedBus.price;
+                    document.getElementById('amount-result').innerHTML = 
+                        '<strong>Total Amount:</strong> ₹' + amount + '<br>' +
+                        '<strong>Bus:</strong> ' + selectedBus.name + '<br>' +
+                        '<strong>From:</strong> ' + selectedBus.from + ' <strong>To:</strong> ' + selectedBus.to;
+                }
+            </script>
+        </body>
+        </html>
+    `;
+
+    newTab.document.write(html);
+    newTab.document.close();
 }
 
 // Display buses in the results section

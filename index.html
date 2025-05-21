@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityExpress - Bus Booking System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">CityExpress</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active" id="home-link">Home</a></li>
+                <li><a href="#" id="routes-link">Routes</a></li>
+                <li><a href="#" id="contact-link">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Home Section (Booking System) -->
+        <section id="home-section">
+            <div class="search-section">
+                <h1>Book Your Bus Tickets</h1>
+                <div class="search-form">
+                    <div class="form-group">
+                        <label for="from">From</label>
+                        <input list="city-list" id="from" placeholder="Departure city" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="to">To</label>
+                        <input list="city-list" id="to" placeholder="Destination city" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date">
+                    </div>
+                    <button id="search-btn">Search Buses</button>
+                </div>
+            </div>
+
+            <div class="results-section hidden">
+                <h2>Available Buses</h2>
+                <div class="sort-options">
+                    <span>Sort by:</span>
+                    <select id="sort-by">
+                        <option value="departure">Departure Time</option>
+                        <option value="arrival">Arrival Time</option>
+                        <option value="price">Price</option>
+                        <option value="seats">Seats Available</option>
+                    </select>
+                </div>
+                <div id="bus-list" class="bus-list">
+                    <!-- Buses will be added here dynamically -->
+                </div>
+            </div>
+
+            <div class="booking-section hidden">
+                <h2>Complete Your Booking</h2>
+                <div class="booking-container">
+                    <div class="bus-details">
+                        <h3 id="booking-bus-name"></h3>
+                        <div class="details-row">
+                            <span class="detail">
+                                <strong>Departure:</strong> 
+                                <span id="booking-departure"></span>
+                            </span>
+                            <span class="detail">
+                                <strong>Arrival:</strong> 
+                                <span id="booking-arrival"></span>
+                            </span>
+                        </div>
+                        <div class="details-row">
+                            <span class="detail">
+                                <strong>Date:</strong> 
+                                <span id="booking-date"></span>
+                            </span>
+                            <span class="detail">
+                                <strong>Duration:</strong> 
+                                <span id="booking-duration"></span>
+                            </span>
+                        </div>
+                        <div class="details-row">
+                            <span class="detail">
+                                <strong>Price:</strong> 
+                                <span id="booking-price"></span>
+                            </span>
+                            <span class="detail">
+                                <strong>Seats Available:</strong> 
+                                <span id="booking-seats"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="passenger-form">
+                        <h3>Passenger Details</h3>
+                        <div class="form-group">
+                            <label for="passenger-name">Full Name</label>
+                            <input type="text" id="passenger-name" placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="passenger-age">Age</label>
+                            <input type="number" id="passenger-age" placeholder="Enter your age">
+                        </div>
+                        <div class="form-group">
+                            <label for="passenger-gender">Gender</label>
+                            <select id="passenger-gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="passenger-email">Email</label>
+                            <input type="email" id="passenger-email" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="passenger-phone">Phone Number</label>
+                            <input type="tel" id="passenger-phone" placeholder="Enter your phone number">
+                        </div>
+                        <div class="form-group">
+                            <label for="passenger-seats">Number of Seats</label>
+                            <input type="number" id="passenger-seats" min="1" max="10" value="1">
+                        </div>
+                        <button id="confirm-booking">Confirm Booking</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="confirmation-section hidden">
+                <div class="confirmation-box">
+                    <div class="success-icon">✓</div>
+                    <h2>Booking Confirmed!</h2>
+                    <p>Your ticket has been booked successfully.</p>
+                    <div class="booking-summary">
+                        <p><strong>Booking ID:</strong> <span id="booking-id"></span></p>
+                        <p><strong>Bus Name:</strong> <span id="confirmation-bus-name"></span></p>
+                        <p><strong>Route:</strong> <span id="confirmation-route"></span></p>
+                        <p><strong>Date:</strong> <span id="confirmation-date"></span></p>
+                        <p><strong>Passenger:</strong> <span id="confirmation-passenger"></span></p>
+                        <p><strong>Total Amount:</strong> <span id="confirmation-amount"></span></p>
+                    </div>
+                    <button id="new-booking">Make New Booking</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Routes Section -->
+        <section id="routes-section" class="hidden">
+            <h1>Our Popular Routes</h1>
+            <div class="routes-container">
+                <div class="route-card">
+                    <h3>Mumbai to Pune</h3>
+                    <p><strong>Distance:</strong> 150 km</p>
+                    <p><strong>Duration:</strong> 3-4 hours</p>
+                    <p><strong>Starting Price:</strong> ₹350</p>
+                </div>
+                <div class="route-card">
+                    <h3>Mumbai to Delhi</h3>
+                    <p><strong>Distance:</strong> 1,400 km</p>
+                    <p><strong>Duration:</strong> 24-26 hours</p>
+                    <p><strong>Starting Price:</strong> ₹1,200</p>
+                </div>
+                <div class="route-card">
+                    <h3>Pune to Ahmedabad</h3>
+                    <p><strong>Distance:</strong> 660 km</p>
+                    <p><strong>Duration:</strong> 10-12 hours</p>
+                    <p><strong>Starting Price:</strong> ₹700</p>
+                </div>
+                <div class="route-card">
+                    <h3>Delhi to Ahmedabad</h3>
+                    <p><strong>Distance:</strong> 950 km</p>
+                    <p><strong>Duration:</strong> 15-16 hours</p>
+                    <p><strong>Starting Price:</strong> ₹900</p>
+                </div>
+                <div class="route-card">
+                    <h3>Mumbai to Ahmedabad</h3>
+                    <p><strong>Distance:</strong> 530 km</p>
+                    <p><strong>Duration:</strong> 8-9 hours</p>
+                    <p><strong>Starting Price:</strong> ₹600</p>
+                </div>
+                <div class="route-card">
+                    <h3>Pune to Delhi</h3>
+                    <p><strong>Distance:</strong> 1,450 km</p>
+                    <p><strong>Duration:</strong> 24-26 hours</p>
+                    <p><strong>Starting Price:</strong> ₹1,250</p>
+                </div>
+                <div class="route-card">
+                    <h3>Mumbai to Nagpur</h3>
+                    <p><strong>Distance:</strong> 820 km</p>
+                    <p><strong>Duration:</strong> 13-15 hours</p>
+                    <p><strong>Starting Price:</strong> ₹800</p>
+                </div>
+                <div class="route-card">
+                    <h3>Ahmedabad to Nagpur</h3>
+                    <p><strong>Distance:</strong> 950 km</p>
+                    <p><strong>Duration:</strong> 15-16 hours</p>
+                    <p><strong>Starting Price:</strong> ₹950</p>
+                </div>
+                <div class="route-card">
+                    <h3>Pune to Nagpur</h3>
+                    <p><strong>Distance:</strong> 720 km</p>
+                    <p><strong>Duration:</strong> 12-13 hours</p>
+                    <p><strong>Starting Price:</strong> ₹750</p>
+                </div>
+                <div class="route-card">
+                    <h3>Delhi to Nagpur</h3>
+                    <p><strong>Distance:</strong> 1,080 km</p>
+                    <p><strong>Duration:</strong> 17-18 hours</p>
+                    <p><strong>Starting Price:</strong> ₹1,100</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact-section" class="hidden">
+            <h1>Contact Us</h1>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Customer Support</h3>
+                    <p><strong>Email:</strong> support@cityexpress.com</p>
+                    <p><strong>Phone:</strong> +91 80000 12345</p>
+                    <p><strong>Hours:</strong> 8:00 AM - 8:00 PM, Monday to Sunday</p>
+                    
+                    <h3>Corporate Office</h3>
+                    <p>CityExpress Bus Services</p>
+                    <p>123 Transit Plaza</p>
+                    <p>Mumbai, Maharashtra 400001</p>
+                    <p>India</p>
+                </div>
+                <div class="contact-form">
+                    <h3>Send us a Message</h3>
+                    <div class="form-group">
+                        <label for="contact-name">Name</label>
+                        <input type="text" id="contact-name" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email">Email</label>
+                        <input type="email" id="contact-email" placeholder="Your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-subject">Subject</label>
+                        <input type="text" id="contact-subject" placeholder="Subject">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-message">Message</label>
+                        <textarea id="contact-message" rows="5" placeholder="Your message"></textarea>
+                    </div>
+                    <button id="send-message">Send Message</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About CityExpress</h3>
+                <p>Providing comfortable and affordable bus travel across the Northeast since 2010.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#" id="footer-home-link">Home</a></li>
+                    <li><a href="#" id="footer-routes-link">Routes</a></li>
+                    <li><a href="#" id="footer-contact-link">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: info@cityexpress.com</p>
+                <p>Phone: +91 80000 12345</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2023 CityExpress. All rights reserved.
+        </div>
+    </footer>
+
+    <datalist id="city-list">
+        <option value="Mumbai"></option>
+        <option value="Pune"></option>
+        <option value="Delhi"></option>
+        <option value="Ahmedabad"></option>
+        <option value="Nagpur"></option>
+    </datalist>
+
+    <script src="script.js"></script>
+</body>
+</html>
